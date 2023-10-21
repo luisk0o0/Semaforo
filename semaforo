@@ -1,0 +1,105 @@
+int verde = 13;
+int amarillo = 12;
+int rojo = 11;
+int verde2 = 10;
+int rojo2 = 9;
+
+int entrada1 = 7;
+int entrada2 = 6;
+int entrada4 = 5;
+int entrada8 = 4;
+
+void setup()
+{
+  pinMode(verde, OUTPUT);
+  pinMode(amarillo, OUTPUT);
+  pinMode(rojo, OUTPUT);
+  pinMode(verde2, OUTPUT);
+  pinMode(rojo2, OUTPUT);
+  pinMode(entrada1, OUTPUT);
+  pinMode(entrada2, OUTPUT);
+  pinMode(entrada4, OUTPUT);
+  pinMode(entrada8, OUTPUT);
+
+}
+
+int convertirBinario(int numero){
+    int binario = 0;
+    int potencia = 1;
+
+    while(numero > 0){
+        int cifra = numero%2;
+        int cantidad = cifra * potencia;
+        binario = binario + cantidad;
+        numero = numero/2;
+        potencia = potencia * 10;
+    }
+    return binario;
+}
+
+void cicloDiurno(int luz){
+  for(int i = 9; i >= 0; i--){
+
+    int binario = convertirBinario(i);
+    digitalWrite(entrada1, binario%10);
+    digitalWrite(entrada2, (binario%100)/10);
+    digitalWrite(entrada4, (binario%1000)/100);
+    digitalWrite(entrada8, (binario%10000)/1000);
+
+    if(i == 0){
+      digitalWrite(amarillo, 1);
+      digitalWrite(luz, 0);
+    }
+    delay(1000);
+  }
+  digitalWrite(amarillo, 0);
+}
+
+
+void cicloNocturno(int luz){
+  for(int i = 5; i >= 0; i--){
+
+    int binario = convertirBinario(i);
+    digitalWrite(entrada1, binario%10);
+    digitalWrite(entrada2, (binario%100)/10);
+    digitalWrite(entrada4, (binario%1000)/100);
+    digitalWrite(entrada8, (binario%10000)/1000);
+
+    if(i == 0){
+      digitalWrite(amarillo, 1);
+      digitalWrite(luz, 0);
+    }
+    delay(1000);
+  }
+  digitalWrite(amarillo, 0);
+}
+
+
+void loop()
+{
+
+
+  for(int i = 0; i < 1; i++){
+    digitalWrite(verde, 1);
+    digitalWrite(rojo2, 1);
+    cicloDiurno(verde);
+    digitalWrite(rojo, 1);
+    digitalWrite(verde2, 1);
+    digitalWrite(rojo2 , 0);
+    cicloDiurno(verde2);
+    digitalWrite(rojo, 0);
+    digitalWrite(verde2, 0);
+  }
+
+  for(int i = 0; i < 1; i++){
+    digitalWrite(verde, 1);
+    digitalWrite(rojo2, 1);
+    cicloNocturno(verde);
+    digitalWrite(rojo, 1);
+    digitalWrite(verde2, 1);
+    digitalWrite(rojo2 , 0);
+    cicloNocturno(verde2);
+    digitalWrite(rojo, 0);
+    digitalWrite(verde2, 0);
+  }
+}
